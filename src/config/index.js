@@ -21,6 +21,7 @@ const EnvConfig = {
 
 export default {
     env,
+    namespace: 'attendance',
     mock: true, //全局控制是否mock
     ...EnvConfig[env],
 };
