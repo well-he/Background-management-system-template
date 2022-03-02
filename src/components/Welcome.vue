@@ -1,6 +1,15 @@
 <script>
 export default {
     name: 'Welcome',
+    mounted() {
+        // this.$request({
+        //     methods: 'get',
+        //     url: '/login',
+        // }).then(res => {
+        //     console.log(res);
+        // });
+
+    },
 };
 </script>
 
