@@ -6,7 +6,7 @@ const env = import.meta.env.MODE || 'prod'; //防止没有定义
 
 const EnvConfig = {
     dev: {
-        baseApi: '/',
+        baseApi: '/api',
         mockApi: 'https://www.fastmock.site/mock/57710510983dcb2e73fa31e2836f4f73/api',
     },
     test: {

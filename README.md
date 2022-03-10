@@ -57,11 +57,11 @@ function request(options) {
 ```
 
 ## 封装storage 
-> 项目多了要添加一个命名空间，不然重名的会相互覆盖
+> 项目多了要添加一个命名空间（一个对象，storage变量都存入这个对象里），不然重名的会相互覆盖
 - 存储token
 - vuex + storage 存储数据
 
-定义一个接口
+这是接口
 ``` ts
 interface storage {
     setItem(key: string, val: any): void;
