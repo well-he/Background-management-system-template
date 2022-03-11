@@ -7,6 +7,20 @@ export default {
             logo,
         };
     },
+    mounted(){
+        //根据用户权限生成菜单
+
+
+    },
+    computed: {
+        panelName() {
+            const userinfo = this.$storage.getItem('userinfo');
+            return userinfo.RealName == null ? userinfo.Name : userinfo.RealName;
+        },
+        bread() {
+            return `${this.$route.meta.title}/`;
+        },
+    },
 };
 </script>
 
@@ -64,8 +78,8 @@ export default {
         </div>
         <div class="content-right">
             <div class="nav-top">
-                <div class="bread">面包屑</div>
-                <div class="user-">admin</div>
+                <div class="bread">{{ bread }}</div>
+                <div class="user-">{{ panelName }}</div>
             </div>
             <el-main class="wrapper">
                 <div class="main-page">

@@ -9,7 +9,9 @@ export default {
 </script>
 
 <template>
-    <div class="welcome"></div>
+    <div class="welcome">
+        
+    </div>
 </template>
 
 <style scoped lang="scss">

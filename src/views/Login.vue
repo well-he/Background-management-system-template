@@ -7,6 +7,21 @@ export default {
         return {
             View,
             User,
+            role: '',
+            options: [
+                {
+                    value: 'teacher',
+                    label: '教师',
+                },
+                {
+                    value: 'student',
+                    label: '学生',
+                },
+                {
+                    value: 'admin',
+                    label: '管理员',
+                },
+            ],
             user: {
                 userName: '',
                 userPwd: '',
@@ -21,18 +36,45 @@ export default {
         };
     },
     methods: {
+        successTip() {
+            ElMessage({
+                message: `登陆成功`,
+                type: 'success',
+            });
+        },
         login() {
             this.$refs.userForm.validate(valid => {
                 if (valid) {
-                    this.$api.login(this.user).then(res => {
-                        ElMessage({
-                            message: `用户${this.user.userName}登陆成功`,
-                            type: 'success',
-                        });
-                        this.$store.commit('saveUserInfo', res);
-                        this.$router.push('/');
-                    });
+                    switch (this.role) {
+                        case 'teacher':
+                            this.teacherLogin();
+                            break;
+                        case 'student':
+                            this.stuLogin();
+                            break;
+                        default:
+                            break;
+                    }
                 }
+            });
+        },
+
+        teacherLogin() {
+            this.$api.tlogin(this.user).then(res => {
+                this.successTip();
+                setTimeout(() => {
+                    this.$store.commit('saveUserInfo', JSON.parse(res));
+                    this.$router.push('/');
+                }, 800);
+            });
+        },
+        stuLogin() {
+            this.$api.slogin(this.user).then(res => {
+                this.successTip();
+                setTimeout(() => {
+                    this.$store.commit('saveUserInfo', JSON.parse(res));
+                    this.$router.push('/');
+                }, 800);
             });
         },
     },
@@ -45,10 +87,30 @@ export default {
             <el-form ref="userForm" :model="user" :rules="rules">
                 <div class="title">校园考勤系统</div>
                 <el-form-item prop="userName">
-                    <el-input type="text" :prefix-icon="User" v-model="user.userName" />
+                    <el-input
+                        type="text"
+                        :prefix-icon="User"
+                        v-model="user.userName"
+                        placeholder="请输入用户名"
+                    />
                 </el-form-item>
                 <el-form-item prop="userPwd">
-                    <el-input type="password" :prefix-icon="View" v-model="user.userPwd" />
+                    <el-input
+                        type="password"
+                        :prefix-icon="View"
+                        v-model="user.userPwd"
+                        placeholder="请输入密码"
+                    />
+                </el-form-item>
+                <el-form-item>
+                    <el-select v-model="role" class="m-2" placeholder="选择权限">
+                        <el-option
+                            v-for="item in options"
+                            :key="item.value"
+                            :label="item.label"
+                            :value="item.value"
+                        ></el-option>
+                    </el-select>
                 </el-form-item>
                 <el-form-item>
                     <el-button type="primary" class="btn-login" @click="login">登录</el-button>
