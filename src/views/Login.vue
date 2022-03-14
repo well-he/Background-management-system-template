@@ -64,7 +64,7 @@ export default {
                 this.successTip();
                 setTimeout(() => {
                     this.$store.commit('saveUserInfo', JSON.parse(res));
-                    this.$router.push('/');
+                    this.$router.push('/system');
                 }, 800);
             });
         },
@@ -73,7 +73,7 @@ export default {
                 this.successTip();
                 setTimeout(() => {
                     this.$store.commit('saveUserInfo', JSON.parse(res));
-                    this.$router.push('/');
+                    this.$router.push('/system');
                 }, 800);
             });
         },
@@ -128,6 +128,7 @@ export default {
     display: flex;
     justify-content: center;
     align-items: center;
+    background-image: url('../assets/images/loginbg.jpg');
     .modal {
         width: 500px;
         padding: 50px;

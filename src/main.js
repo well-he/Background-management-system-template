@@ -4,6 +4,7 @@ import router from './router/index';
 import store from './store';
 //完整引入element-plus
 import ElementPlus from 'element-plus';
+import * as ElIcons from '@element-plus/icons-vue';
 import 'element-plus/dist/index.css';
 //引入封装的utils
 import request from './utils/request';
@@ -19,6 +20,9 @@ app.config.globalProperties.$request = request;
 app.config.globalProperties.$api = api;
 app.config.globalProperties.$storage = storage;
 
+for (const name in ElIcons) {
+    app.component(name, ElIcons[name]);
+}
+
 app.use(router).use(store).use(ElementPlus);
 app.mount('#app');
-

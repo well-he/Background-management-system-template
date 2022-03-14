@@ -1,16 +1,39 @@
 <script>
 import logo from '../assets/logo.png';
+import TreeMenu from './TreeMenu.vue';
 export default {
     name: 'Home',
-    data: () => {
+    components: { TreeMenu },
+    data() {
         return {
             logo,
+            isCollapse: false,
+            activeMenu: location.hash.replace('#', ''),
+            userInfo: this.$storage.getItem('userinfo'),
+            menus: [],
         };
     },
-    mounted(){
+    methods: {
+        toggle() {
+            this.isCollapse = !this.isCollapse;
+        },
+        goWelcome() {
+            this.$router.push('/system');
+        },
+        handleLogout(e) {
+            if (e === 'logout') {
+                this.$storage.removeItem('userinfo');
+                this.$router.push('/login');
+            }
+        },
+        async getLeftMenu() {
+            const list = await this.$api.getMenuList();
+            this.menus = JSON.parse(list);
+        },
+    },
+    mounted() {
         //根据用户权限生成菜单
-
-
+        this.getLeftMenu();
     },
     computed: {
         panelName() {
@@ -26,60 +49,55 @@ export default {
 
 <template>
     <div class="layout">
-        <div class="aside">
-            <div class="logo">
-                <img :src="logo" alt="logo" />
-                <span>校园考勤系统</span>
+        <div :class="['nav-site', isCollapse ? 'fold' : 'unfold']">
+            <!-- 系统LOGO -->
+            <div class="logo" @click="goWelcome">
+                <img src="./../assets/logo.png" alt="" />
+                <span class="sys-title">校园考勤后台</span>
             </div>
 
             <el-menu
-                active-text-color="#ffd04b"
+                :default-active="activeMenu"
                 background-color="#001529"
-                class="el-menu-vertical-demo"
-                default-active="0"
                 text-color="#fff"
+                :collapse="isCollapse"
+                class="nav-menu"
+                router
             >
-                <el-menu-item index="0">
-                    <el-icon><document /></el-icon>
-                    <span>首页</span>
-                </el-menu-item>
-                <el-sub-menu index="1">
-                    <template #title>
-                        <el-icon><location /></el-icon>
-                        <span>校园管理</span>
-                    </template>
-                    <el-menu-item-group>
-                        <el-menu-item index="1-1">专业管理</el-menu-item>
-                        <el-menu-item index="1-2">学院管理</el-menu-item>
-                    </el-menu-item-group>
-                </el-sub-menu>
-                <el-sub-menu index="2">
-                    <template #title>
-                        <el-icon><user /></el-icon>
-                        <span>学生管理</span>
-                    </template>
-                    <el-menu-item-group>
-                        <el-menu-item index="2-1">学生管理</el-menu-item>
-                        <el-menu-item index="2-2">班级管理</el-menu-item>
-                    </el-menu-item-group>
-                </el-sub-menu>
-
-                <el-sub-menu index="3">
-                    <template #title>
-                        <el-icon><location /></el-icon>
-                        <span>考勤管理</span>
-                    </template>
-                    <el-menu-item-group>
-                        <el-menu-item index="3-1">签到管理</el-menu-item>
-                        <el-menu-item index="3-2">请假管理</el-menu-item>
-                    </el-menu-item-group>
-                </el-sub-menu>
+                <tree-menu :userMenu="menus" />
             </el-menu>
         </div>
-        <div class="content-right">
+        <div :class="['content-right', isCollapse ? 'fold' : 'unflod']">
             <div class="nav-top">
-                <div class="bread">{{ bread }}</div>
-                <div class="user-">{{ panelName }}</div>
+                <div class="nav-left">
+                    <div class="menu-fold" @click="toggle">
+                        <el-button type="info">
+                            <el-icon>
+                                <expand />
+                            </el-icon>
+                        </el-button>
+                    </div>
+                    <div class="bread">面包屑</div>
+                </div>
+                <div class="user-info">
+                    <el-badge :is-dot="noticeCount > 0 ? true : false" class="notice" type="danger">
+                        <el-icon>
+                            <bell />
+                        </el-icon>
+                    </el-badge>
+                    <el-dropdown @command="handleLogout">
+                        <span class="user-link">{{ panelName }}</span>
+                        <template #dropdown>
+                            <el-dropdown-menu>
+                                <el-dropdown-item command="email">
+                                    邮箱：{{ userInfo.Email }}
+                                </el-dropdown-item>
+                                <el-dropdown-item command="myself">个人信息修改</el-dropdown-item>
+                                <el-dropdown-item command="logout">退出</el-dropdown-item>
+                            </el-dropdown-menu>
+                        </template>
+                    </el-dropdown>
+                </div>
             </div>
             <el-main class="wrapper">
                 <div class="main-page">
@@ -93,46 +111,56 @@ export default {
 <style lang="scss">
 .layout {
     position: relative;
-    .aside {
+    .nav-site {
         position: fixed;
         width: 200px;
         height: 100vh;
-        background-color: var(--menu-color);
+        background-color: #001529;
         color: #fff;
-        overflow-y: auto;
+        overflow: hidden;
         transition: width 0.5s;
         .logo {
-            width: 100%;
-            padding: 10px;
-            color: var(--text-color);
             display: flex;
             align-items: center;
-            border-bottom: 1px solid var(--border-color);
+            font-size: 18px;
+            height: 50px;
+            cursor: pointer;
             img {
-                height: 50px;
+                margin: 0 16px;
+                width: 32px;
+                height: 32px;
             }
-            span {
-                text-align: center;
-                flex-grow: 2;
+            .sys-title {
+                overflow: hidden;
+                white-space: nowrap;
+                text-overflow: ellipsis;
+                /*兼容性*/
+                -webkit-text-overflow: ellipsis;
             }
         }
-        .list {
-            display: flex;
-            flex-direction: column;
-            padding-top: 30px;
-            text-align: center;
-            font-size: 1.25rem;
-            .item {
-                padding: 10px;
-                border-bottom: 1px solid var(--border-color);
-                &.active {
-                    color: var(--menu-active-color);
-                }
-            }
+        .nav-menu {
+            height: calc(100vh - 50px);
+            border-right: none;
+        }
+        // 合并
+        &.fold {
+            width: 64px;
+        }
+        // 展开
+        &.unfold {
+            width: 200px;
         }
     }
     .content-right {
         margin-left: 200px;
+        // 合并
+        &.fold {
+            margin-left: 64px;
+        }
+        // 展开
+        &.unfold {
+            margin-left: 200px;
+        }
         .nav-top {
             height: 50px;
             line-height: 50px;
@@ -140,14 +168,33 @@ export default {
             justify-content: space-between;
             border-bottom: 1px solid #ddd;
             padding: 0 20px;
+            .nav-left {
+                display: flex;
+                align-items: center;
+                .menu-fold {
+                    margin-right: 15px;
+                    font-size: 18px;
+                }
+            }
+            .user-info {
+                .notice {
+                    line-height: 30px;
+                    margin-right: 15px;
+                }
+                .user-link {
+                    cursor: pointer;
+                    color: #409eff;
+                    line-height: 50px;
+                }
+            }
         }
         .wrapper {
-            background: var(--content-bgc);
+            background: #eef0f3;
             padding: 20px;
             height: calc(100vh - 50px);
             .main-page {
+                background: #fff;
                 height: 100%;
-                background-color: #fff;
             }
         }
     }

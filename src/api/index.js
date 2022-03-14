@@ -20,4 +20,11 @@ export default {
             mock: false,
         });
     },
+    getMenuList() {
+        return request({
+            url: '/menus/aside',
+            method: 'get',
+            mock: false,
+        });
+    },
 };
