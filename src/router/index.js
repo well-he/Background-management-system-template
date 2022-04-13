@@ -1,9 +1,11 @@
 import { createRouter, createWebHashHistory } from 'vue-router';
 import Home from '../components/Home.vue';
+import storage from '../utils/storage';
 const routes = [
     {
         name: 'system',
         path: '/',
+        // redirect: '/system',
         meta: {
             title: '首页',
         },
@@ -19,26 +21,18 @@ const routes = [
             },
             {
                 name: 'students',
-                path: '/students',
+                path: '/manager',
                 component: () => import('../views/Student.vue'),
                 meta: {
-                    title: '学生管理',
+                    title: '学生信息',
                 },
             },
             {
-                name: 'teachers',
-                path: '/teachers',
-                component: () => import('../views/Teachers.vue'),
+                name: 'qrcode',
+                path: '/qrcode',
+                component: () => import('../views/Qrcode.vue'),
                 meta: {
-                    title: '教师管理',
-                },
-            },
-            {
-                name: 'curriculum',
-                path: '/curriculum',
-                component: () => import('../views/Curriculum.vue'),
-                meta: {
-                    title: '课程表管理',
+                    title: '签到二维码',
                 },
             },
             {
@@ -49,21 +43,12 @@ const routes = [
                     title: '签到管理',
                 },
             },
-
             {
-                name: 'qrcode',
-                path: '/qrcode',
-                component: () => import('../views/Qrcode.vue'),
+                name: 'leave',
+                path: '/leave',
+                component: () => import('../views/Leave.vue'),
                 meta: {
-                    title: '签到二维码',
-                },
-            },
-            {
-                name: 'attendance',
-                path: '/attendance',
-                component: () => import('../views/Attendance.vue'),
-                meta: {
-                    title: '考勤签到',
+                    title: '请假申请',
                 },
             },
             {
@@ -104,5 +89,13 @@ const router = createRouter({
     history: createWebHashHistory(),
     routes,
 });
+
+// router.beforeEach((to, from, next) => {
+//     if (storage.getItem('userinfo')) {
+//         next();
+//     } else {
+//         next('/login');
+//     }
+// });
 
 export default router;

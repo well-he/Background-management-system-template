@@ -9,4 +9,8 @@ export default {
     <router-view></router-view>
 </template>
 
-<style></style>
+<style>
+.text-center {
+    text-align: center;
+}
+</style>

@@ -4,17 +4,9 @@
 
 import request from '../utils/request';
 export default {
-    tlogin(param) {
+    login(param) {
         return request({
-            url: '/users/tlogin',
-            method: 'post',
-            data: param,
-            mock: false,
-        });
-    },
-    slogin(param) {
-        return request({
-            url: '/users/slogin',
+            url: '/teacher/login',
             method: 'post',
             data: param,
             mock: false,
@@ -22,8 +14,25 @@ export default {
     },
     getMenuList() {
         return request({
-            url: '/menus/aside',
+            url: '/config/menus',
             method: 'get',
+            data: {},
+            mock: false,
+        });
+    },
+    getStudentByClass(param) {
+        return request({
+            url: '/teacher/myclass',
+            method: 'get',
+            data: param,
+            mock: false,
+        });
+    },
+    modifyStudent(param) {
+        return request({
+            url: 'student/modify',
+            method: 'put',
+            data: param,
             mock: false,
         });
     },

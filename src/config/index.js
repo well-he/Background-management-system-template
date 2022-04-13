@@ -1,7 +1,6 @@
 /**
  * 环境配置封装
  */
-
 const env = import.meta.env.MODE || 'prod'; //防止没有定义
 
 const EnvConfig = {

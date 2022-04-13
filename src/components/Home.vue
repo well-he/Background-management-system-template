@@ -27,13 +27,21 @@ export default {
             }
         },
         async getLeftMenu() {
-            const list = await this.$api.getMenuList();
-            this.menus = JSON.parse(list);
+            const list = await this.$api.getMenuList(this.userInfo.Role);
+            this.menus = list;
+        },
+        logined() {
+            if (!this.$storage.getItem('userinfo')) {
+                this.$router.push('/login');
+            }
         },
     },
     mounted() {
         //根据用户权限生成菜单
         this.getLeftMenu();
+    },
+    created() {
+        this.logined();
     },
     computed: {
         panelName() {
@@ -53,7 +61,7 @@ export default {
             <!-- 系统LOGO -->
             <div class="logo" @click="goWelcome">
                 <img src="./../assets/logo.png" alt="" />
-                <span class="sys-title">校园考勤后台</span>
+                <div class="sys-title">校园考勤后台</div>
             </div>
 
             <el-menu
@@ -64,7 +72,7 @@ export default {
                 class="nav-menu"
                 router
             >
-                <tree-menu :userMenu="menus" />
+                <tree-menu :userMenus="menus" />
             </el-menu>
         </div>
         <div :class="['content-right', isCollapse ? 'fold' : 'unflod']">
@@ -86,7 +94,7 @@ export default {
                         </el-icon>
                     </el-badge>
                     <el-dropdown @command="handleLogout">
-                        <span class="user-link">{{ panelName }}</span>
+                        <span class="user-link">{{ userInfo.RealName }}</span>
                         <template #dropdown>
                             <el-dropdown-menu>
                                 <el-dropdown-item command="email">
@@ -122,7 +130,6 @@ export default {
         .logo {
             display: flex;
             align-items: center;
-            font-size: 18px;
             height: 50px;
             cursor: pointer;
             img {
@@ -132,10 +139,8 @@ export default {
             }
             .sys-title {
                 overflow: hidden;
-                white-space: nowrap;
                 text-overflow: ellipsis;
-                /*兼容性*/
-                -webkit-text-overflow: ellipsis;
+                white-space: nowrap;
             }
         }
         .nav-menu {

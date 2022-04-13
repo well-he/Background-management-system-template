@@ -30,6 +30,8 @@ service.interceptors.response.use(response => {
     if (code === 200) {
         return data;
     } else if (code === 50001) {
+
+        
         ElMessage.error(ERROE_MSG.TOKEN_INVALID);
         //跳转登录页
         setTimeout(() => {

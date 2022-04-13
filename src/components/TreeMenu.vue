@@ -1,20 +1,20 @@
 <template>
-    <template v-for="menu in userMenu" :key="menu.Title">
-        <el-sub-menu v-if="menu.Child" :index="menu.Title">
+    <template v-for="menu in userMenus" :key="menu.id">
+        <el-sub-menu v-if="menu.child" :index="menu.title">
             <template #title>
-                <el-icon><component :is="menu.Icon" /></el-icon>
-                <span>{{ menu.Title }}</span>
+                <el-icon><component :is="menu.icon" /></el-icon>
+                <span>{{ menu.title }}</span>
             </template>
             <el-menu-item-group>
-                <el-menu-item v-for="cmenu in menu.Child" :index="cmenu.To">
-                    <el-icon><component :is="cmenu.Icon" /></el-icon>
-                    <span>{{ cmenu.Title }}</span>
+                <el-menu-item v-for="cmenu in menu.child" :key="cmenu.id" :index="cmenu.to">
+                    <el-icon><component :is="cmenu.icon" /></el-icon>
+                    <span>{{ cmenu.title }}</span>
                 </el-menu-item>
             </el-menu-item-group>
         </el-sub-menu>
-        <el-menu-item v-else :index="menu.To">
-            <el-icon><component :is="menu.Icon" /></el-icon>
-            <span>{{ menu.Title }}</span>
+        <el-menu-item v-else :index="menu.to">
+            <el-icon><component :is="menu.icon" /></el-icon>
+            <span>{{ menu.title }}</span>
         </el-menu-item>
     </template>
 </template>
@@ -23,7 +23,7 @@
 export default {
     name: 'TreeMenu',
     props: {
-        userMenu: {
+        userMenus: {
             type: Array,
             default: () => [],
         },
