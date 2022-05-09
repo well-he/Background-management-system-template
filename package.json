@@ -11,10 +11,13 @@
         "@element-plus/icons-vue": "^1.1.1",
         "axios": "^0.26.0",
         "element-plus": "^2.0.4",
+        "qrcode.vue": "^3.3.3",
         "vite": "^2.8.0",
         "vue": "^3.2.25",
         "vue-router": "^4.0.13",
-        "vuex": "^4.0.2"
+        "vuex": "^4.0.2",
+        "ws": "^8.5.0",
+        "xlsx": "^0.18.5"
     },
     "devDependencies": {
         "@vitejs/plugin-vue": "^2.2.0",

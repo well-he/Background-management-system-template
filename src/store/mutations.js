@@ -9,4 +9,9 @@ export default {
         state.userinfo = userinfo;
         storage.setItem('userinfo', userinfo);
     },
+
+    saveCourseInfo(state, courseinfo) {
+        state.courseinfo = courseinfo;
+        storage.setItem('courseinfo', courseinfo);
+    },
 };

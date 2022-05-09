@@ -23,7 +23,7 @@ export default {
                 Password: '',
             },
             rules: {
-                Code: [{ required: true, message: '请输入用户名', trigger: 'blur' }],
+                Code: [{ required: true, message: '请输入职工号', trigger: 'blur' }],
                 Password: [
                     { required: true, message: '请输入密码', trigger: 'blur' },
                     { min: 5, max: 10, message: '长度在 5 到 10 个字符', trigger: 'blur' },
@@ -58,6 +58,7 @@ export default {
         },
 
         teacherLogin() {
+            this.logined = true;
             this.$api.login(this.user).then(res => {
                 this.successTip();
                 this.logined = false;
@@ -94,12 +95,12 @@ export default {
                     />
                 </el-form-item>
 
-                <el-form-item>
+                <!-- <el-form-item>
                     <span>登录用户：</span>
                     <el-radio-group v-model="role" size="large" class="role">
                         <el-radio-button v-for="item in options" :label="item.label" />
                     </el-radio-group>
-                </el-form-item>
+                </el-form-item> -->
                 <el-form-item>
                     <el-button type="primary" class="btn-login" :loading="loaded" @click="login">
                         登录

@@ -48,6 +48,7 @@ export default {
             stuList: [],
             showDialog: false,
             editStudent: {},
+            input: '',
         };
     },
     methods: {

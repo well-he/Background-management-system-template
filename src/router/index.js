@@ -9,6 +9,13 @@ const routes = [
         meta: {
             title: '首页',
         },
+        beforeEnter: (to, from, next) => {
+            if (storage.getItem('userinfo')) {
+                next();
+            } else {
+                next('/login');
+            }
+        },
         component: Home,
         children: [
             {
@@ -90,8 +97,8 @@ const router = createRouter({
     routes,
 });
 
-// router.beforeEach((to, from, next) => {
-//     if (storage.getItem('userinfo')) {
+// router.beforeResolve((to, from, next) => {
+//     if (to.path = "/" || storage.getItem('userinfo')) {
 //         next();
 //     } else {
 //         next('/login');

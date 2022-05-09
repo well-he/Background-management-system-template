@@ -7,6 +7,7 @@ import storage from '../utils/storage';
 
 const state = {
     userinfo: '' || storage.getItem('userinfo'), //获取用户信息
+    courseinfo: '' || storage.getItem('courseinfo'), //获取课程信息
 };
 
 export default createStore({

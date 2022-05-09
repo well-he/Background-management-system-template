@@ -49,7 +49,7 @@ export default {
             return userinfo.RealName == null ? userinfo.Name : userinfo.RealName;
         },
         bread() {
-            return `${this.$route.meta.title}/`;
+            return `${this.$route.meta.title}`;
         },
     },
 };
@@ -85,7 +85,7 @@ export default {
                             </el-icon>
                         </el-button>
                     </div>
-                    <div class="bread">面包屑</div>
+                    <div class="bread">{{ bread }}</div>
                 </div>
                 <div class="user-info">
                     <el-badge :is-dot="noticeCount > 0 ? true : false" class="notice" type="danger">
@@ -197,9 +197,11 @@ export default {
             background: #eef0f3;
             padding: 20px;
             height: calc(100vh - 50px);
+            transition: width 0.5s;
             .main-page {
                 background: #fff;
                 height: 100%;
+                transition: width 0.5s;
             }
         }
     }

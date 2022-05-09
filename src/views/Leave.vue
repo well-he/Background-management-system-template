@@ -113,7 +113,7 @@ const open1 = () => {
     padding: 20px;
 }
 .leave-form {
-    width: 60%;
+    // width: 60%;
     padding: 20px;
     .reason {
         width: 70%;

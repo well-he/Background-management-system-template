@@ -30,8 +30,40 @@ export default {
     },
     modifyStudent(param) {
         return request({
-            url: 'student/modify',
+            url: '/student/modify',
             method: 'put',
+            data: param,
+            mock: false,
+        });
+    },
+    getAllLeaveRecords() {
+        return request({
+            url: '/student/leaveRecords',
+            method: 'get',
+            data: {},
+            mock: false,
+        });
+    },
+    auditLeave(param) {
+        return request({
+            url: '/teacher/auditLeave',
+            method: 'put',
+            data: param,
+            mock: false,
+        });
+    },
+    getCourse(param) {
+        return request({
+            url: '/teacher/course',
+            method: 'get',
+            data: param,
+            mock: false,
+        });
+    },
+    getAttendanceRecords(param) {
+        return request({
+            url: '/attendance/records',
+            method: 'get',
             data: param,
             mock: false,
         });

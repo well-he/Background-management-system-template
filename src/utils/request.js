@@ -30,8 +30,6 @@ service.interceptors.response.use(response => {
     if (code === 200) {
         return data;
     } else if (code === 50001) {
-
-        
         ElMessage.error(ERROE_MSG.TOKEN_INVALID);
         //跳转登录页
         setTimeout(() => {
@@ -53,7 +51,7 @@ function request(options) {
     if (options.method.toLowerCase() === 'get') {
         options.params = options.data; //axios的get和post不同，这里将二者相同
     }
-    if(typeof options.mock != 'undefined'){
+    if (typeof options.mock != 'undefined') {
         config.mock = options.mock;
     }
     if (config.env === 'prod') {
