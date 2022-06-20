@@ -4,6 +4,7 @@
     "version": "0.0.0",
     "scripts": {
         "dev": "vite --host --mode dev",
+        "start": "vite --host --mode dev",
         "build": "vite build",
         "preview": "vite preview"
     },

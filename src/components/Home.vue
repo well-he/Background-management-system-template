@@ -100,7 +100,7 @@ export default {
                                 <el-dropdown-item command="email">
                                     邮箱：{{ userInfo.Email }}
                                 </el-dropdown-item>
-                                <el-dropdown-item command="myself">个人信息修改</el-dropdown-item>
+                                <!-- <el-dropdown-item command="myself">个人信息修改</el-dropdown-item> -->
                                 <el-dropdown-item command="logout">退出</el-dropdown-item>
                             </el-dropdown-menu>
                         </template>

@@ -46,6 +46,7 @@
                     >
                         同意
                     </el-button>
+                    <br>
                     <el-button
                         type="primary"
                         :disabled="scope.row.LeaveResult != 0"

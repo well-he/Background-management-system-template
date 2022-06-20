@@ -1,9 +1,9 @@
 <script setup>
-import { ref, reactive, getCurrentInstance, watch } from 'vue';
+import { ref, reactive, getCurrentInstance, watch, onMounted } from 'vue';
 import { ElNotification } from 'element-plus';
 const { appContext } = getCurrentInstance();
-const { modifyStudent } = appContext.config.globalProperties.$api;
-
+const { modifyStudent, setScore, getStuScore } = appContext.config.globalProperties.$api;
+const { userinfo } = appContext.config.globalProperties.$store.state;
 const emits = defineEmits(['close']);
 
 const props = defineProps({
@@ -21,8 +21,18 @@ let FormModel = reactive({ students: props.student });
 let Scores = reactive({
     UsualScore: '',
     ExamScore: '',
-    TotalSCore: '',
+    TotalScore: '',
 });
+//监听scores的变化
+watch(
+    () => {
+        Scores.TotalScore =
+            parseInt(Scores.UsualScore * 0.4) + parseInt(Scores.ExamScore * 0.6) == 0
+                ? ''
+                : parseInt(Scores.UsualScore * 0.4) + parseInt(Scores.ExamScore * 0.6);
+    },
+    { deep: true }
+);
 watch(
     () => props.student,
     val => {
@@ -49,11 +59,43 @@ const resetForm = () => {
     FormModel.students = {};
 };
 
+const submitScore = () => {
+    setScore({
+        UsualScore: Scores.UsualScore,
+        ExamScore: Scores.ExamScore,
+        TotalScore: Scores.TotalScore,
+        TeacherCode: userinfo.Code,
+        StudentCode: FormModel.students.Code,
+        Subject: userinfo.TeachingSubjects,
+    }).then(res => {
+        if (res) {
+            ElNotification({
+                title: '提示',
+                message: '成绩录入成功！',
+            });
+            Scores.TotalScore = '';
+            Scores.ExamScore = '';
+            Scores.UsualScore = '';
+        }
+    });
+};
+// const getScore = () => {
+//     getStuScore({
+//         StudentCode: FormModel.students.Code,
+//         TeacherCode: userinfo.Code,
+//     }).then(res => {
+//         if (res == 'no') {
+//             console.log(res);
+//         }else{
+//             console.log(res)
+//         }
+//     });
+// };
 const activeName = ref('first');
 
-const handleClick = (tab, event) => {
-    console.log(tab, event);
-};
+// onMounted(() => {
+//     getScore();
+// });
 </script>
 
 <template>
@@ -66,7 +108,7 @@ const handleClick = (tab, event) => {
         @close="onClose"
         close-on-press-escape
     >
-        <el-tabs v-model="activeName" class="demo-tabs" @tab-click="handleClick">
+        <el-tabs v-model="activeName" class="demo-tabs">
             <el-tab-pane label="编辑信息" name="first">
                 <div v-if="props.student">
                     <div class="demo-drawer__content">
@@ -111,7 +153,7 @@ const handleClick = (tab, event) => {
                     <h1>none</h1>
                 </div>
             </el-tab-pane>
-            <el-tab-pane label="学生成绩" name="second">
+            <el-tab-pane label="学生成绩 " name="second">
                 <el-card class="box-card">
                     <template #header>
                         <div class="card-header">
@@ -120,15 +162,18 @@ const handleClick = (tab, event) => {
                     </template>
                     <el-form model="Scores" label-position="left" label-width="80px">
                         <el-form-item label="平时成绩" prop="Code">
-                            <el-input v-model="Scores.UsualScore" />
+                            <el-input v-model="Scores.UsualScore" placeholder="平时成绩占比为40%" />
                         </el-form-item>
                         <el-form-item label="考试成绩" prop="RealName">
-                            <el-input v-model="Scores.ExamScore" />
+                            <el-input v-model="Scores.ExamScore" placeholder="考试成绩占比为60%" />
                         </el-form-item>
                         <el-form-item label="总成绩" prop="Password">
-                            <el-input v-model="Scores.TotalScore" />
+                            <el-input
+                                v-model="Scores.TotalScore"
+                                placeholder="总成绩为平时成绩和考试成绩总和"
+                            />
                         </el-form-item>
-                        <el-button type="primary">提交</el-button>
+                        <el-button type="primary" @click="submitScore">提交</el-button>
                     </el-form>
                 </el-card>
             </el-tab-pane>

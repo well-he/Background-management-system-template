@@ -7,16 +7,22 @@
             <el-form-item label="记录uid">
                 <el-input v-model.trim="queryForm.uid" placeholder="记录UID"></el-input>
             </el-form-item>
-            <el-form-item label="学生姓名">
+            <!-- <el-form-item label="学生姓名">
                 <el-input
                     v-model.trim="queryForm.stuName"
                     placeholder="查询单个学生签到记录"
                 ></el-input>
-            </el-form-item>
+            </el-form-item> -->
             <el-form-item>
                 <el-button type="primary" @click="Query">查询</el-button>
-                <el-button type="primary" @click="ExportCsv">导出为excel</el-button>
-                <el-link>{{ SavePath }}</el-link>
+                <el-button type="primary" @click="ExportCsv">导出为CSV</el-button>
+                <!-- <el-button
+                    type="warning"
+                    @click="GetAbsent"
+                    :class="[queryForm.uid == '' ? 'hide' : 'show']"
+                >
+                    查看本次未签到学生
+                </el-button> -->
             </el-form-item>
         </el-form>
         <el-table
@@ -27,19 +33,26 @@
             empty-text="没有签到记录"
             stripe
         >
-            <el-table-column prop="ID" label="记录号" />
+            <el-table-column prop="ID" label="记录号" width="80" />
+            <el-table-column label="签到时间">
+                <template #default="scope">
+                    {{ timeFormat(scope.row.UnionID) }}
+                </template>
+            </el-table-column>
             <el-table-column prop="ClassName" label="班级" />
             <el-table-column prop="SubjectName" label="课程名称" />
             <el-table-column prop="StudentCode" label="学生学号" />
             <el-table-column prop="studentName" label="学生姓名" />
             <el-table-column prop="PublishTeacher" label="发布教师" />
-            <!-- <el-table-column prop="AttendanceResult" label="签到结果" /> -->
             <el-table-column label="签到结果" width="180">
                 <template #default="scope">
                     <div style="display: flex; align-items: center">
                         <el-icon><timer /></el-icon>
-                        <span style="margin-left: 10px">
-                            {{ scope.row.AttendanceResult === 0 ? '' : '已签到' }}
+                        <span
+                            style="margin-left: 10px"
+                            :class="[scope.row.AttendanceResult === 0 ? 'absent' : '']"
+                        >
+                            {{ scope.row.AttendanceResult === 0 ? '未签到' : '已签到' }}
                         </span>
                     </div>
                 </template>
@@ -52,6 +65,7 @@
 </template>
 
 <script>
+import { formatUnionID } from '../utils/time';
 export default {
     data() {
         return {
@@ -59,10 +73,17 @@ export default {
             queryForm: {
                 className: '',
                 uid: '',
-                stuName: '',
+                // stuName: '',
             },
             SavePath: '',
         };
+    },
+    computed: {
+        timeFormat(time) {
+            return function (time) {
+                return formatUnionID(time);
+            };
+        },
     },
     methods: {
         async Query() {
@@ -72,7 +93,7 @@ export default {
             const res = await this.$api.getAttendanceRecords({
                 className: queryForm.className,
                 uid: queryForm.uid,
-                stuName: queryForm.stuName,
+                // stuName: queryForm.stuName,
             });
             return JSON.parse(res);
         },
@@ -80,7 +101,7 @@ export default {
             const csv = this.Array2Table(this.attendances);
             let a = document.createElement('a');
             a.href = 'data:text/txt;charset=utf-8,\ufeff' + encodeURIComponent(csv);
-            a.download = '测试.csv';
+            a.download = '考勤记录.csv';
             a.click(); // 这里偷个懒，直接用click模拟
         },
         Array2Table(arr) {
@@ -97,6 +118,14 @@ export default {
             csv += '\n';
             return csv;
         },
+        // async GetAbsent() {
+        //     const res = await this.$api.getAbsentStus({
+        //         className: this.queryForm.className,
+        //         uuid: this.queryForm.uid,
+        //     });
+        //     const absentStus = JSON.parse(res);
+        //     absentStus.map(item=>item.RealName)
+        // },
     },
 };
 </script>
@@ -104,5 +133,8 @@ export default {
 <style lang="scss">
 .attendance-records {
     padding: 20px;
+}
+.absent {
+    color: red;
 }
 </style>

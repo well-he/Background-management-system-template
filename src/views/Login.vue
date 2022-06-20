@@ -35,7 +35,7 @@ export default {
     methods: {
         successTip() {
             ElMessage({
-                message: `登陆成功`,
+                message: `登录成功`,
                 type: 'success',
             });
         },
@@ -47,9 +47,6 @@ export default {
                         case '教师':
                             this.teacherLogin();
                             break;
-                        // case '管理员':
-                        //     this.adminLogin();
-                        //     break;
                         default:
                             break;
                     }

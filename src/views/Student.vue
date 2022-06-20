@@ -16,7 +16,7 @@
             <el-table-column prop="Code" sortable label="学号" />
             <el-table-column prop="RealName" label="姓名" />
             <el-table-column prop="College" label="学院" />
-            <el-table-column prop="Major" label="专业" />
+            <el-table-column prop="Major" label="专业" width="180" />
             <el-table-column prop="Class" label="班级" />
             <el-table-column prop="Phone" label="手机号" />
             <el-table-column prop="Email" label="邮箱" />

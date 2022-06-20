@@ -68,4 +68,25 @@ export default {
             mock: false,
         });
     },
+    setScore(param) {
+        return request({
+            url: '/teacher/score',
+            method: 'post',
+            data: param,
+        });
+    },
+    getAbsentStus(param) {
+        return request({
+            url: '/attendance/absenteeism',
+            method: 'get',
+            data: param,
+        });
+    },
+    getStuScore(param) {
+        return request({
+            url: '/teacher/score',
+            method: 'get',
+            data: param,
+        });
+    },
 };
