@@ -7,23 +7,12 @@ export default {
         return {
             View,
             User,
-            role: '教师',
-            options: [
-                {
-                    value: 'teacher',
-                    label: '教师',
-                },
-                {
-                    value: 'admin',
-                    label: '管理员',
-                },
-            ],
             user: {
                 Code: '',
                 Password: '',
             },
             rules: {
-                Code: [{ required: true, message: '请输入职工号', trigger: 'blur' }],
+                Code: [{ required: true, message: '请输入用户名', trigger: 'blur' }],
                 Password: [
                     { required: true, message: '请输入密码', trigger: 'blur' },
                     { min: 5, max: 10, message: '长度在 5 到 10 个字符', trigger: 'blur' },
@@ -43,13 +32,7 @@ export default {
             this.logined = true;
             this.$refs.userForm.validate(valid => {
                 if (valid) {
-                    switch (this.role) {
-                        case '教师':
-                            this.teacherLogin();
-                            break;
-                        default:
-                            break;
-                    }
+                    this.teacherLogin();
                 }
             });
         },
@@ -74,7 +57,7 @@ export default {
     <div class="login-wrapper">
         <div class="modal">
             <el-form ref="userForm" :model="user" :rules="rules">
-                <div class="title">校园考勤系统-管理端</div>
+                <div class="title">后台管理系统</div>
                 <el-form-item prop="userName">
                     <el-input
                         type="text"
@@ -91,13 +74,6 @@ export default {
                         placeholder="请输入密码"
                     />
                 </el-form-item>
-
-                <!-- <el-form-item>
-                    <span>登录用户：</span>
-                    <el-radio-group v-model="role" size="large" class="role">
-                        <el-radio-button v-for="item in options" :label="item.label" />
-                    </el-radio-group>
-                </el-form-item> -->
                 <el-form-item>
                     <el-button type="primary" class="btn-login" :loading="loaded" @click="login">
                         登录

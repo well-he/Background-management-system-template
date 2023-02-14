@@ -27,46 +27,6 @@ const routes = [
                 },
             },
             {
-                name: 'students',
-                path: '/manager',
-                component: () => import('../views/Student.vue'),
-                meta: {
-                    title: '学生信息',
-                },
-            },
-            {
-                name: 'qrcode',
-                path: '/qrcode',
-                component: () => import('../views/Qrcode.vue'),
-                meta: {
-                    title: '签到二维码',
-                },
-            },
-            {
-                name: 'sign-in',
-                path: '/sign-in',
-                component: () => import('../views/SignIn.vue'),
-                meta: {
-                    title: '签到管理',
-                },
-            },
-            {
-                name: 'leave',
-                path: '/leave',
-                component: () => import('../views/Leave.vue'),
-                meta: {
-                    title: '请假申请',
-                },
-            },
-            {
-                name: 'audit',
-                path: '/audit',
-                component: () => import('../views/Audit.vue'),
-                meta: {
-                    title: '审批系统',
-                },
-            },
-            {
                 path: '/404',
                 name: 'NotFound',
                 meta: {
@@ -96,13 +56,5 @@ const router = createRouter({
     history: createWebHashHistory(),
     routes,
 });
-
-// router.beforeResolve((to, from, next) => {
-//     if (to.path = "/" || storage.getItem('userinfo')) {
-//         next();
-//     } else {
-//         next('/login');
-//     }
-// });
 
 export default router;
