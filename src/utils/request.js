@@ -18,8 +18,6 @@ const service = axios.create({
 
 //请求拦截
 service.interceptors.request.use(request => {
-    const headers = request.headers;
-    if (!headers.Authorization) headers.Authorization = 'well_wei';
     return request;
 });
 
@@ -28,6 +26,7 @@ service.interceptors.response.use(response => {
     //response.data是请求的返回数据，code是自定义并非statusCode
     const { code, data, msg } = response.data;
     if (code === 200) {
+        console.log(200);
         return data;
     } else if (code === 50001) {
         ElMessage.error(ERROE_MSG.TOKEN_INVALID);
@@ -59,7 +58,7 @@ function request(options) {
     } else {
         service.defaults.baseURL = config.mock ? config.mockApi : config.baseApi;
     }
-
+    console.log(options);
     return service(options);
 }
 ['get', 'post', 'put', 'delete', 'patch'].forEach(item => {

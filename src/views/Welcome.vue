@@ -1,52 +1,57 @@
-<script>
-export default {
-    name: 'Welcome',
-    props: {
-        content: {
-            type: String,
-            default: '',
-        },
+<script setup>
+import { ref, getCurrentInstance, computed, onMounted } from 'vue';
+defineProps({
+    content: {
+        type: String,
+        default: '',
     },
-    data: () => {
-        return {
-            user: {},
-            courses: [],
-        };
+});
+
+const { proxy } = getCurrentInstance();
+
+const { $store, $api, $storage } = proxy;
+const user = ref([]);
+
+const tips = computed({
+    get() {
+        return '';
     },
-    methods: {
-        async getCourse() {
-            const userinfo = this.$storage.getItem('userinfo');
-            const courses = await this.$api.getCourse({
-                tcode: userinfo.Code,
-            });
-            this.courses = JSON.parse(courses);
-            this.$store.commit('saveCourseInfo', JSON.parse(courses));
-        },
-    },
-    computed: {
-        tips() {
-            return this.courses.length === 0
-                ? '今天没有课，可以休息了！'
-                : `今天有${this.courses.length}节课哦！不要迟到哦！`;
-        },
-    },
-    mounted() {
-        this.user = this.$store.state.userinfo;
-        this.getCourse();
-    },
-};
+});
+console.log($store);
 </script>
 
 <template>
     <div class="welcome">
-        <el-card class="box-card">
-            <template #header>
-                <div class="card-header">
-                    <span>工作台</span>
-                </div>
-            </template>
-            {{ tips }}
-        </el-card>
+        <el-row>
+            <el-col :span="8">
+                <el-card class="box-card">
+                    <template #header>
+                        <div class="card-header">
+                            <span>工作台</span>
+                        </div>
+                    </template>
+                </el-card>
+            </el-col>
+            <el-col :span="6">
+                <el-card class="box-card">
+                    <template #header>
+                        <div class="card-header">
+                            <span>今日事项</span>
+                        </div>
+                    </template>
+                </el-card>
+            </el-col>
+            <el-col :span="8">
+                <el-card class="box-card">
+                    <template #header>
+                        <div class="card-header">今天有4项工作任务!</div>
+                    </template>
+                    <div class="card-body">
+                        <div v-for="o in 4" :key="o" class="text item">{{ 'List item ' + o }}</div>
+                    </div>
+                </el-card>
+            </el-col>
+        </el-row>
     </div>
 </template>
 
@@ -54,11 +59,14 @@ export default {
 .welcome {
     width: 100%;
     height: 100%;
-    background: url(../assets/images/welcome.png) no-repeat center;
     padding: 15px;
     .box-card {
-        width: 50%;
         padding: 15px;
+        margin: 0 10px;
+    }
+    .card-body {
+        font-size: 14px;
+        line-height: 1rem;
     }
 }
 </style>

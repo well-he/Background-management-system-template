@@ -20,6 +20,7 @@ app.config.globalProperties.$request = request;
 app.config.globalProperties.$api = api;
 app.config.globalProperties.$storage = storage;
 
+//注册el图标
 for (const name in ElIcons) {
     app.component(name, ElIcons[name]);
 }

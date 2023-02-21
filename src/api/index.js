@@ -1,21 +1,8 @@
 /**
  * api管理
  */
+import users from './users';
 
-import request from '../utils/request';
-export default {
-    login(param) {
-        return request({
-            url: '/login',
-            method: 'post',
-            data: param,
-        });
-    },
-    getMenuList() {
-        return request({
-            url: '/config/menus',
-            method: 'get',
-            data: {},
-        });
-    },
-};
+import other from './other';
+
+export default { users, other };

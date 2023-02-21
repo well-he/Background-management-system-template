@@ -1,58 +1,40 @@
-<script>
+<script setup>
 import logo from '../assets/logo.png';
 import TreeMenu from './TreeMenu.vue';
-export default {
-    name: 'Home',
-    components: { TreeMenu },
-    data() {
-        return {
-            logo,
-            isCollapse: false,
-            activeMenu: location.hash.replace('#', ''),
-            userInfo: this.$storage.getItem('userinfo'),
-            menus: [],
-        };
-    },
-    methods: {
-        toggle() {
-            this.isCollapse = !this.isCollapse;
-        },
-        goWelcome() {
-            this.$router.push('/system');
-        },
-        handleLogout(e) {
-            if (e === 'logout') {
-                this.$storage.removeItem('userinfo');
-                this.$router.push('/login');
-            }
-        },
-        async getLeftMenu() {
-            const list = await this.$api.getMenuList(this.userInfo.Role);
-            this.menus = list;
-        },
-        logined() {
-            if (!this.$storage.getItem('userinfo')) {
-                this.$router.push('/login');
-            }
-        },
-    },
-    mounted() {
-        //根据用户权限生成菜单
-        this.getLeftMenu();
-    },
-    created() {
-        this.logined();
-    },
-    computed: {
-        panelName() {
-            const userinfo = this.$storage.getItem('userinfo');
-            return userinfo.RealName == null ? userinfo.Name : userinfo.RealName;
-        },
-        bread() {
-            return `${this.$route.meta.title}`;
-        },
-    },
-};
+import { ref, getCurrentInstance, onMounted, computed } from 'vue';
+
+const { proxy } = getCurrentInstance();
+const { $store, $api, $storage, $route, $router } = proxy;
+const isCollapse = ref(false);
+const menus = ref([]);
+const oneWord = ref('');
+const activeMenu = location.hash.replace('#', '');
+const userInfo = $storage.getItem('userinfo');
+
+function toggle() {
+    isCollapse.value = !isCollapse.value;
+}
+
+function goWelcome() {
+    $router.push('/system');
+}
+function handleLogout(e) {
+    if (e === 'logout') {
+        $storage.removeItem('userinfo');
+        $router.push('/login');
+    }
+}
+const panelName = computed(() => {
+    const userinfo = $storage.getItem('userinfo');
+    return userinfo.userName;
+});
+
+const bread = computed(() => $route.meta.title);
+
+onMounted(async () => {
+    const word = await $api.other.getOneWord();
+    oneWord.value = word.data.hitokoto;
+});
 </script>
 
 <template>
@@ -61,7 +43,7 @@ export default {
             <!-- 系统LOGO -->
             <div class="logo" @click="goWelcome">
                 <img src="./../assets/logo.png" alt="" />
-                <div class="sys-title">校园考勤后台</div>
+                <div class="sys-title">后台管理系统</div>
             </div>
 
             <el-menu
@@ -87,6 +69,9 @@ export default {
                     </div>
                     <div class="bread">{{ bread }}</div>
                 </div>
+                <div class="onword">
+                    {{ oneWord }}
+                </div>
                 <div class="user-info">
                     <el-badge :is-dot="noticeCount > 0 ? true : false" class="notice" type="danger">
                         <el-icon>
@@ -94,11 +79,11 @@ export default {
                         </el-icon>
                     </el-badge>
                     <el-dropdown @command="handleLogout">
-                        <span class="user-link">{{ userInfo.RealName }}</span>
+                        <span class="user-link">{{ panelName }}</span>
                         <template #dropdown>
                             <el-dropdown-menu>
                                 <el-dropdown-item command="email">
-                                    邮箱：{{ userInfo.Email }}
+                                    邮箱：{{ userInfo.userEmail }}
                                 </el-dropdown-item>
                                 <!-- <el-dropdown-item command="myself">个人信息修改</el-dropdown-item> -->
                                 <el-dropdown-item command="logout">退出</el-dropdown-item>
