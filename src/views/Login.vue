@@ -2,7 +2,7 @@
 import { ref, reactive } from 'vue';
 import { View, User } from '@element-plus/icons-vue';
 import { ElMessage } from 'element-plus';
-
+import api from '@/api'
 const user = reactive({
     Code: '',
     Password: ''
@@ -22,17 +22,17 @@ const successTip = () => {
         type: 'success',
     });
 }
-const login = () => {
+const login = (userForm) => {
     logined.value = true;
     userForm.validate(valid => {
         if (valid) {
-            this.$api.login(this.user).then(res => {
+            api.login(user).then(res => {
                 successTip();
-                logined = false;
-                setTimeout(() => {
-                    this.$store.commit('saveUserInfo', res);
-                    this.$router.push('/system');
-                }, 800);
+                logined.value = false;
+                // setTimeout(() => {
+                //     this.$store.commit('saveUserInfo', res);
+                //     this.$router.push('/system');
+                // }, 800);
             });
         }
     });
@@ -54,7 +54,7 @@ const login = () => {
                 </el-form-item>
                 <el-form-item prop=""></el-form-item>
                 <el-form-item>
-                    <el-button type="primary" class="btn-login" :loading="loaded" @click="login">
+                    <el-button type="primary" class="btn-login" :loading="loaded" @click="login(userForm)">
                         登录
                     </el-button>
                 </el-form-item>
