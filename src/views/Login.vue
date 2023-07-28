@@ -15,7 +15,7 @@ const rules = reactive({
     ],
 })
 const logined = ref(false);
-
+const userForm = ref()
 const successTip = () => {
     ElMessage({
         message: `登录成功`,
@@ -23,12 +23,12 @@ const successTip = () => {
     });
 }
 const login = () => {
-    this.logined = true;
-    this.$refs.userForm.validate(valid => {
+    logined.value = true;
+    userForm.validate(valid => {
         if (valid) {
             this.$api.login(this.user).then(res => {
-                this.successTip();
-                this.logined = false;
+                successTip();
+                logined = false;
                 setTimeout(() => {
                     this.$store.commit('saveUserInfo', res);
                     this.$router.push('/system');
