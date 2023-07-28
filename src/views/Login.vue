@@ -1,44 +1,31 @@
-<script>
+<script setup>
+import { ref, reactive } from 'vue';
 import { View, User } from '@element-plus/icons-vue';
 import { ElMessage } from 'element-plus';
-export default {
-    name: 'Login',
-    data: () => {
-        return {
-            View,
-            User,
-            user: {
-                Code: '',
-                Password: '',
-            },
-            rules: {
-                Code: [{ required: true, message: '请输入用户名', trigger: 'blur' }],
-                Password: [
-                    { required: true, message: '请输入密码', trigger: 'blur' },
-                    { min: 5, max: 10, message: '长度在 5 到 10 个字符', trigger: 'blur' },
-                ],
-            },
-            logined: false,
-        };
-    },
-    methods: {
-        successTip() {
-            ElMessage({
-                message: `登录成功`,
-                type: 'success',
-            });
-        },
-        login() {
-            this.logined = true;
-            this.$refs.userForm.validate(valid => {
-                if (valid) {
-                    this.teacherLogin();
-                }
-            });
-        },
 
-        teacherLogin() {
-            this.logined = true;
+const user = reactive({
+    Code: '',
+    Password: ''
+})
+const rules = reactive({
+    Code: [{ required: true, message: '请输入用户名', trigger: 'blur' }],
+    Password: [
+        { required: true, message: '请输入密码', trigger: 'blur' },
+        { min: 5, max: 10, message: '长度在 5 到 10 个字符', trigger: 'blur' },
+    ],
+})
+const logined = ref(false);
+
+const successTip = () => {
+    ElMessage({
+        message: `登录成功`,
+        type: 'success',
+    });
+}
+const login = () => {
+    this.logined = true;
+    this.$refs.userForm.validate(valid => {
+        if (valid) {
             this.$api.login(this.user).then(res => {
                 this.successTip();
                 this.logined = false;
@@ -47,10 +34,11 @@ export default {
                     this.$router.push('/system');
                 }, 800);
             });
-        },
-    },
-    mounted() {},
-};
+        }
+    });
+}
+
+
 </script>
 
 <template>
@@ -59,21 +47,12 @@ export default {
             <el-form ref="userForm" :model="user" :rules="rules">
                 <div class="title">后台管理系统</div>
                 <el-form-item prop="userName">
-                    <el-input
-                        type="text"
-                        :prefix-icon="User"
-                        v-model="user.Code"
-                        placeholder="请输入用户名"
-                    />
+                    <el-input type="text" :prefix-icon="User" v-model="user.Code" placeholder="请输入用户名" />
                 </el-form-item>
                 <el-form-item prop="userPwd">
-                    <el-input
-                        type="password"
-                        :prefix-icon="View"
-                        v-model="user.Password"
-                        placeholder="请输入密码"
-                    />
+                    <el-input type="password" :prefix-icon="View" v-model="user.Password" placeholder="请输入密码" />
                 </el-form-item>
+                <el-form-item prop=""></el-form-item>
                 <el-form-item>
                     <el-button type="primary" class="btn-login" :loading="loaded" @click="login">
                         登录
@@ -93,18 +72,21 @@ export default {
     justify-content: center;
     align-items: center;
     background-image: url('../assets/images/loginbg.jpg');
+
     .modal {
         width: 500px;
         padding: 50px;
         background-color: #fff;
         border-radius: 5px;
         box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+
         .title {
             font-size: 2.5rem;
             line-height: 1.5;
             text-align: center;
             margin-bottom: 30px;
         }
+
         .btn-login {
             width: 100%;
         }
