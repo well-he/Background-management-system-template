@@ -1,10 +1,12 @@
 import request from '../utils/request';
+
 export default {
-    login(param) {
+    login(param, loading) {
         return request({
             url: '/users/login',
             method: 'post',
             data: param,
+            loading: loading
         });
     },
     registry(param) {
@@ -12,6 +14,7 @@ export default {
             url: '/users/registry',
             method: 'post',
             data: param,
+            loading: loading
         });
     },
     getMenuList() {
@@ -19,6 +22,7 @@ export default {
             url: '/config/menus',
             method: 'get',
             data: {},
+            loading: loading
         });
     },
 };

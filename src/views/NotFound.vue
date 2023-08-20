@@ -1,6 +1,6 @@
 <template>
     <div class="NotFound">
-        <el-empty description="404! The page is not found" />
+        <el-empty description="404! 这个页面跑丢了~" />
     </div>
 </template>
 

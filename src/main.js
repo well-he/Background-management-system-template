@@ -6,20 +6,12 @@ import store from './store';
 import ElementPlus from 'element-plus';
 import * as ElIcons from '@element-plus/icons-vue';
 import 'element-plus/dist/index.css';
-//引入封装的utils
-import request from './utils/request';
-import storage from './utils/storage';
 //引入公共样式
 import './assets/style/index.scss';
 import './assets/style/reset.css';
-import api from './api';
 
 const app = createApp(App);
 //全局挂载对象
-app.config.globalProperties.$request = request;
-app.config.globalProperties.$api = api;
-app.config.globalProperties.$storage = storage;
-
 //注册el图标
 for (const name in ElIcons) {
     app.component(name, ElIcons[name]);

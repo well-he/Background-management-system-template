@@ -1,27 +1,21 @@
-import { createRouter, createWebHashHistory } from 'vue-router';
+import {createRouter, createWebHashHistory} from 'vue-router';
 import Home from '../components/Home.vue';
 import storage from '../utils/storage';
+
 const routes = [
     {
-        name: 'system',
+        name: 'home',
         path: '/',
-        // redirect: '/system',
+        component: Home,
+        redirect: '/welcome',
         meta: {
             title: '首页',
         },
-        beforeEnter: (to, from, next) => {
-            if (storage.getItem('userinfo')) {
-                next();
-            } else {
-                next('/login');
-            }
-        },
-        component: Home,
         children: [
             {
                 name: 'welcome',
-                path: '/system',
-                component: () => import('../views/Welcome.vue'),
+                path: '/welcome',
+                component: () => import('../views/welcome/index.vue'),
                 meta: {
                     title: '欢迎页',
                 },
@@ -36,14 +30,22 @@ const routes = [
                 component: () => import('../views/NotFound.vue'),
             },
         ],
+        // beforeEnter: (to, from, next) => {
+        //     if (storage.getItem('userinfo')) {
+        //         next();
+        //     } else {
+        //         next('/login');
+        //     }
+        // },
     },
+    // 登录界面单独拿出来
     {
         name: 'login',
         path: '/login',
         meta: {
             title: '登录',
         },
-        component: () => import('../views/Login.vue'),
+        component: () => import('../views/login/index.vue'),
     },
     // 所有未定义路由，全部重定向到404页
     {
@@ -56,5 +58,6 @@ const router = createRouter({
     history: createWebHashHistory(),
     routes,
 });
+
 
 export default router;

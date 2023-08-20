@@ -1,8 +1,8 @@
 /**
  * api管理
  */
-import users from './users';
+import usersApi from './users';
 
-import other from './other';
+import otherApi from './other';
 
-export default { users, other };
+export { usersApi, otherApi };

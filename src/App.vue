@@ -1,8 +1,4 @@
-<script>
-export default {
-    name: 'app',
-    mounted() {},
-};
+<script setup>
 </script>
 
 <template>
